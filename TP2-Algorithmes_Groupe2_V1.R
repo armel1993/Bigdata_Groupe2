@@ -21,23 +21,18 @@ OROZCO-HERNANDEZ Felipe
 #
 # QUESTION 0 - IMPORTATION DES PACKAGES ET LIBRAIRIES UTILISEES PAR LA SUITE
 # 
-
-
-
-CODE
 library(bigmemory)
 library(biganalytics)
 library(glmnet)
 library(ROCR)
-
+require(biglm) 
+require(neuralnet)
+require(nnet)
+require(keras)
 #
 # QUESTION 1 - IMPORT DU JEU DE DONNEES
 # 
-
-
 ### Q1.1 - Indiquer le dossier et le fichier cible
-
-
 CODE
 setwd("D:/Mis Documentos/Formation Continue/4. Estadística/Toulouse Master/5. Cours M2 Stats/5. T2 2021/Big data/2. Les algorithmes du Big Data/Travaux pratiques")
 fichier.Usualdata<-"train_echantillon.csv"
@@ -45,46 +40,32 @@ fichier.BDdata<-"train.csv"
 
 ### Q1.2 - Importer les jeux de données complets et échantillonnés
 ###        Prediction du prix du taxi à New York - https://www.kaggle.com/c/new-york-city-taxi-fare-prediction/data
-
-
 # ---------- Utiliser une librairie usuelle (version de fichier échantillonnée)
 
-#CODE
-
-Usualdata<-read.csv(fichier.Usualdata,sep=",")
+Usualdata <- read.csv(fichier.Usualdata)
 str(Usualdata)
 
 # ---------- Utiliser une librairie 'Big Data' (Dask ou bigmemory) (version complète du fichier)
 
-CODE
-
 BDdata<- read.big.matrix(fichier.BDdata,sep = ",",header = TRUE) 
 str(BDdata)
-
 
 #
 # QUESTION 2 - PREPARATION/NETTOYAGE DU JEU DE DONNEES
 # 
-
-
 ### Q2.1 - Nettoyer et préparer les données
-
-
 # Enlever les valeurs incorrectes ou manquantes (si pertinent)
-
-
 # ---------- Utiliser une librairie usuelle
-
-CODE
 #2.1.1. Usualdata
 #----
 # 5542385 cas
+
 attach(Usualdata)
-
 #Exploration de cas manquantes
-sapply(Usualdata, function(x) sum(is.na(x)))
-#-->Les variables dropoff on des NA, nous allons les enlever:
 
+sapply(Usualdata, function(x) sum(is.na(x)))
+#-->Les variables dropoff on des 38 NA, nous allons les enlever:
+       
 Usualdata_clean<-Usualdata[!is.na(dropoff_longitude),]
 sapply(Usualdata_clean, function(x) sum(is.na(x)))
 #--> tous les cas sont !NA 
